@@ -1,51 +1,29 @@
-<p align="center"><img src="https://github.com/func-godot/.github/assets/44485952/53bdc589-33e8-4a39-8707-01a5f850d155" alt="FuncGodotRanger" width="15%" /> 
-<img src="https://github.com/func-godot/.github/assets/44485952/b7c19218-2089-4319-a2bd-6ce4b354c1ce" alt="FuncGodot" width="80%"/></p>
+## Super User Demo
 
-***FuncGodot*** is a plugin for [Godot 4](https://godotengine.org/) that allows users to generate Godot scenes using the [Quake MAP file format](https://quakewiki.org/wiki/Quake_Map_Format). Map files can be made in a variety of editors, the most commonly recommended one being [TrenchBroom](https://trenchbroom.github.io/). It is a reworking and rewrite of the [Qodot](https://github.com/QodotPlugin/Qodot) plugin for Godot 3 and 4.
+Super User is a stealth and physics puzzle game with mechanics that allow the player to reprogram game mechanics. It’s currently in a WIP state and only a demo is provided in this release. The level is whiteboxed and incomplete, although unfinished parts of the map are accessible to the player in this demo version. Super User is free and open source, although there are plans to eventually move away from godot to a custom or code-based engine.
 
-[Full documentation is available online](https://func-godot.github.io/func_godot_docs/) as well as off. Release zip files come pre-packaged with the manual, but if you need to you can [download the most up-to-date standalone copy here](https://github.com/func-godot/func_godot_docs/releases/).
+# Plot
 
-For more help or to contribute to the community, join us on the [Official FuncGodot Discord](https://discord.gg/eBQ7EfNZSZ)!
+You're an AI robot being trained to repair a facility and its electronic parts, 
+but a system failure puts you on the wrong side of the cameras. 
+Stealth your way through dark hallways and use your reprogramming training to manipulate surveillance drones and other obstacles. 
+Lift the lockdown on the floor and escape.
 
-<p align="center"><img src="https://github.com/func-godot/.github/assets/44485952/0a4d2436-884e-4cee-94a8-220df3813627" alt="TrenchBroom" width="45%" /> 
-<img src="https://github.com/func-godot/.github/assets/44485952/25e96e49-3482-40cf-ade9-99e83c3eca7d" alt="Godot FuncGodotMap Built" width="45%"/></p>
+# Future plans
 
+This demo is in an early state and still needs plenty of work. There are plans to:
+Add a menu with gamemodes/scenarios/levels
+Add a procedurally generated roguelike mode
+Add a mario-maker style online mode
+Alternatively custom levels
+Move to a code-based game engine like Bevy or a custom solution
+Modding support
+As always, add and improve content
 
-## Features
+# Poll
 
-- Godot Scene Generation
-  - File support for Quake `map`, `wad`, and `lmp` palette formats
-  - File support for Half-Life `wad` format
-  - Meshes from `map` brush geometry
-  - Materials and UVs from `map` texture definitions
-  - Convex and concave collision shapes
-- Entity Definition Support
-  - Fully customizable entities that can be defined for TrenchBroom and generated in Godot
-  - Leverage the `map` format's classname and key value pair systems
-  - Define the visual and collision properties of brush entities on a per-classname basis
-  - Retrieve easy to access mesh metadata for per face material information
-  - Define point entities that can be generated from node class name and script or from packed scenes
-  - Generate GLB display models with correct orientation and scale for point entities in map editors with GLTF support
-  - FGD (Forge Game Data) export
-- TrenchBroom Integration
-  - GameConfig export
-  - Brush and Face Tags
-  - `model` keyword and scale expression
-- NetRadiant Custom Integration
-  - Gamepack Export
-  - Shader definitions
-  - Customizable build options
+Super User was started as a research project to investigate mechanics that could interest players in game design and programming. If you download and play the demo please fill out the accompanying survey.
 
-## Confirmed Compatible Map Editors
-  - TrenchBroom
-  - J.A.C.K.
-  - NetRadiant Custom[br]
-Help us add to this list by testing out your preferred map editor and helping us come up with compatibility solutions!
+# Building
 
-## Credits
-
-FuncGodot was created by [Hannah "EMBYR" Crawford](https://embyr.sh/), [Emberlynn Bland](https://github.com/deertears/), and [Tim "RhapsodyInGeek" Maccabe](https://github.com/RhapsodyInGeek), reworked from the [Godot 4 port of Qodot](https://github.com/QodotPlugin/Qodot/tree/main) by Embyr, with contributions from members of the FuncGodot, Qodot, Godot, and Quake Mapping Communities.
-
-Both plugins are based on the original [Qodot for Godot 3.5](https://github.com/QodotPlugin/qodot-plugin/) created by [Josh "Shifty" Palmer](https://twitter.com/ShiftyAxel).
-
-<p align="center"><img src="https://github.com/func-godot/.github/assets/44485952/9ff9cd96-024b-4202-b4a2-611741b81609" alt="Godambler" /></p>
+It's a regular godot project, so building and running is the same. However, if there are issues with missing dependencies, pull or clone again and run setup.sh (or manually copy addons folder from func_godot_plugin to the root directory)
