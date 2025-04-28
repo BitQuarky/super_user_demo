@@ -64,37 +64,52 @@ func make_visible(ammount: float, name: String) -> void:
 var physicsMode = false
 var phyobj
 
-func _on_animation_player_2_shoot() -> void:
-	if (c == null): 
-		print("null!")
-	elif (c.is_in_group("teleport")):
-		print("teleport!")
-		var m : Node3D = c.get_parent_node_3d()
-		self.get_tree().create_tween().tween_property(self.get_parent_node_3d().get_parent_node_3d(), "global_position", m.global_position, .5).set_ease(Tween.EASE_IN)
-	elif (c.is_in_group("escape")):
-		print("escape!")
-	elif (c.is_in_group("computer")):
-		if c.get_parent_node_3d().name == "escapepc":
-			shouldEscape = true
-		else:
-			get_tree().create_tween().tween_method(make_visible.bind(c.name), 0.0, 1.0, 0.2)
-			darken.emit(.85)
-			toggleMove()
-			toggleMouse.emit()
-	elif (c.is_in_group("physicsObject")):
-		if !physicsMode:
-			phyobj = c.get_parent_node_3d()
-			phyobj.reparent(player)
-			var tween = get_tree().create_tween()
-			tween.tween_property(phyobj, "position", Vector3(0.0, 0.0, -4.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
-			tween.parallel().tween_property(phyobj, "rotation", Vector3(0.0, -deg_to_rad(90.0), 0.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
-			physicsMode = !physicsMode
-		elif c.get_parent_node_3d() == phyobj:
-			phyobj.reparent(player.get_parent_node_3d())
-			physicsMode = !physicsMode
+@onready var tween: Tween
 
+func release_object():
+	phyobj.reparent(player.get_parent_node_3d())
+	get_tree().create_tween().tween_callback(func (): print(phyobj.position)).set_delay(0.2)
+	physicsMode = !physicsMode
+
+func _on_animation_player_2_shoot(down: bool) -> void:
+	if down:
+		if (c == null): 
+			print("null!")
+		elif (c.is_in_group("teleport")):
+			print("teleport!")
+			var m : Node3D = c.get_parent_node_3d()
+			self.get_tree().create_tween().tween_property(self.get_parent_node_3d().get_parent_node_3d(), "global_position", m.global_position, .5).set_ease(Tween.EASE_IN)
+		elif (c.is_in_group("escape")):
+			print("escape!")
+		elif (c.is_in_group("computer")):
+			if c.get_parent_node_3d().name == "escapepc":
+				shouldEscape = true
+			else:
+				get_tree().create_tween().tween_method(make_visible.bind(c.name), 0.0, 1.0, 0.2)
+				darken.emit(.85)
+				toggleMove()
+				toggleMouse.emit()
+		elif (c.is_in_group("physicsObject")):
+			if !physicsMode:
+				phyobj = c.get_parent_node_3d()
+				phyobj.reparent(player)
+				tween = get_tree().create_tween()
+				tween.tween_property(phyobj, "position", Vector3(0.0, 0.0, -4.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+				tween.parallel().tween_property(phyobj, "rotation", Vector3(0.0, -deg_to_rad(90.0), 0.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+				physicsMode = !physicsMode
+			#elif c.get_parent_node_3d() == phyobj:
+			#	phyobj.reparent(player.get_parent_node_3d())
+			#	physicsMode = !physicsMode
 	else:
-		print(c.name)
+		print("released")
+		if (phyobj != null and physicsMode == true):
+			if (tween.is_running()):
+				tween.stop()
+				#release_object()
+				#tween.tween_callback(release_object)
+			#else:
+			release_object()
+		if c != null: print(c.name)
 	pass # Replace with function body.
 
 
@@ -117,6 +132,6 @@ func _on_timer_timeout() -> void:
 func reset() -> void:
 	player.position = Vector3(0.468, 0.819, -0.333)
 	darken.emit(.0)
-	toggleMove()
+	toggleMove()                                                                        
 	toggleMouse.emit()
-	popdown.emit()
+	popdown.emit()                                                                                                                                                                                                                                                                                                                                                       

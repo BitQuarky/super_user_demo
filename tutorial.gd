@@ -16,5 +16,13 @@ func unlock(door: int) -> void:
 	get_node("start" + str(door) + "/door").visible = false
 	get_node("start" + str(door) + "/door2").visible = false
 
+var opened = false
+
 func _on_aim_open_door() -> void:
+	if !opened:
+		self.get_tree().create_tween().tween_callback(tween.bind(2)).set_delay(0.5)
+
+
+func _on_area_3d_unlockall() -> void:
+	opened = true
 	self.get_tree().create_tween().tween_callback(tween.bind(2)).set_delay(0.5)

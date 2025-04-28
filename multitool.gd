@@ -4,7 +4,7 @@ var runmode: bool = false
 var model: Node3D
 var playercam: Node3D
 
-signal shoot
+signal shoot(down: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -20,9 +20,9 @@ func _process(delta: float) -> void:
 	
 func _input(event: InputEvent) -> void:
 	model.rotation.z = playercam.rotation.x / 10
-	if event is InputEventMouseButton and event.pressed and not runmode:
+	if event is InputEventMouseButton and not runmode:
 		play("multitool1_anim/shootAction_001")
-		shoot.emit()
+		shoot.emit(event.pressed)
 		
 
 
