@@ -1,17 +1,20 @@
 extends Node3D
 
 func _ready() -> void:
-	self.get_tree().create_tween().tween_callback(tween).set_delay(5.0)
+	self.get_tree().create_tween().tween_callback(tween.bind(1)).set_delay(5.0)
 	
-func tween() -> void:
-	var player: AnimationPlayer = $door/AnimationPlayer
-	var player2: AnimationPlayer = $door2/AnimationPlayer
+func tween(door: int) -> void:
+	var player: AnimationPlayer = get_node("start" + str(door) + "/door/AnimationPlayer")
+	var player2: AnimationPlayer = get_node("start" + str(door) + "/door2/AnimationPlayer")
 	player.play("open")
 	player2.play("open_001")
-	self.get_tree().create_tween().tween_callback(unlock).set_delay(1.5)
+	self.get_tree().create_tween().tween_callback(unlock.bind(door)).set_delay(1.5)
 
-func unlock() -> void:
-	var barrier = $door/StaticBody3D
+func unlock(door: int) -> void:
+	var barrier = 	get_node("start" + str(door) + "/door/StaticBody3D")
 	barrier.process_mode = Node.PROCESS_MODE_DISABLED
-	$door.visible = false
-	$door2.visible = false
+	get_node("start" + str(door) + "/door").visible = false
+	get_node("start" + str(door) + "/door2").visible = false
+
+func _on_aim_open_door() -> void:
+	self.get_tree().create_tween().tween_callback(tween.bind(2)).set_delay(0.5)

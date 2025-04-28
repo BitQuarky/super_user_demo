@@ -46,8 +46,10 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 	if body == player:
 		var light: SpotLight3D = cam.get_node("cameraSpot")
 		light.light_color = Color(1.0, 0.4, 0.3)
+		$Timer.start(1.0)
 
 func _on_area_3d_body_exited(body: Node3D) -> void:
 	if body == player:
 		print("exiting")
 		light.light_color = color
+		$Timer.stop()

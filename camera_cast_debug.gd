@@ -5,9 +5,6 @@ extends MeshInstance3D
 @onready var rays: Array[RayCast3D] = [self.get_node("../south"), self.get_node("../southwest"), self.get_node("../west"), self.get_node("../northwest"), self.get_node("../north"), self.get_node("../northeast"), self.get_node("../east"), self.get_node("../southeast")]
 @onready var pole: RayCast3D = self.get_node("../pole")
 
-func _ready() -> void:
-	var test: Node3D = cam.get_node("test");
-	test.position = cam.position;
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var pos = cam.global_position;
@@ -33,4 +30,3 @@ func _process(delta: float) -> void:
 			msh.surface_add_vertex(to_local(pole.get_collision_point()));
 			last = next;
 	msh.surface_end();
-	pass
