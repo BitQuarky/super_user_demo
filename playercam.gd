@@ -38,9 +38,9 @@ func _input(event: InputEvent) -> void:
 			#rotation.x += curr.y / -6000.0
 			#player.rotation.y += curr.x / -6000.0
 			#print("%f, %f" % [rotation.y, player.rotation.y])
-				get_tree().create_tween().tween_property(player, "rotation", Vector3(0, player.rotation.y + (curr.x / -300), 0), .06)
+				get_tree().create_tween().tween_property(player, "rotation", Vector3(0, player.rotation.y + (curr.x / -200), 0), .06)
 				if abs(rotation.x + (curr.y / -300.0)) < 1.39626 or sign(curr.y / -300.0) != sign(rotation.x):
-					get_tree().create_tween().tween_property(get_node("."), "rotation", Vector3(rotation.x + (curr.y / -200.0), 0, 0), .06)
+					get_tree().create_tween().tween_property(get_node("."), "rotation", Vector3(rotation.x + (curr.y / -100.0), 0, 0), .06)
 
 
 func _on_aim_toggle_mouse() -> void:
