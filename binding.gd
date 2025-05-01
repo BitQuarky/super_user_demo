@@ -19,6 +19,7 @@ func _process(delta: float) -> void:
 
 
 func _on_id_pressed(id: int) -> void:
+	print("here")
 	player.set_meta("rebinding", true)
 	var s = await cam.propagateBinding
 	var b = keybind.get_item_text(get_item_index(id))
