@@ -6,12 +6,19 @@ var n = 0
 
 func _process(delta: float) -> void:
 	if n < children.size():
-		if (children[n].position.distance_to(player.position) < 2.0):
-			children[n].visible = false
-			n+=1
-			children[n].visible = true
-		else:
-			children[n].modulate.a = max((children[n].position.distance_to(player.position) - 2.0) / 5.0, 0.0)
+		#if (children[n].position.distance_to(player.position) < 2.0):
+		#	children[n].visible = false
+		#	n+=1
+		#	children[n].visible = true
+		#else:
+		var dist = children[n].position.distance_to(player.position)
+		children[n].modulate.a = max((dist - 2.0) / 5.0, 0.0)
+		children[n].scale = Vector3(dist / 4.0, dist / 4.0, dist / 4.0)
 
-func _next() -> void:
-	n += 1
+func _next(goal: int) -> void:
+	children[n].visible = false
+	if goal > n:
+		n = goal
+	elif goal == -1:
+		n += 1
+	children[n].visible = true

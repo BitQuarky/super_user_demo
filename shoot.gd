@@ -5,6 +5,7 @@ signal popdown()
 signal darken(target: float)
 signal toggleMouse()
 signal openDoor() #temporary
+signal advance_goal(goal: int)
 
 var shouldEscape = false 
 var escaped = false
@@ -84,6 +85,7 @@ func _on_animation_player_2_shoot(down: bool) -> void:
 		elif (c.is_in_group("computer")):
 			if c.get_parent_node_3d().name == "escapepc":
 				shouldEscape = true
+				advance_goal.emit(4)
 			else:
 				get_tree().create_tween().tween_method(make_visible.bind(c.name), 0.0, 1.0, 0.2)
 				darken.emit(.85)

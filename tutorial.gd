@@ -1,9 +1,17 @@
 extends Node3D
 
+signal advance_goal(goal: int)
+
 func _ready() -> void:
-	self.get_tree().create_tween().tween_callback(tween.bind(1)).set_delay(5.0)
-	
+	self.get_tree().create_tween().tween_callback(open_first).set_delay(5.0)
+
+func open_first():
+	tween(1)
+	advance_goal.emit(1)
+
 func tween(door: int) -> void:
+	if door == 2:
+		advance_goal.emit(2)
 	var player: AnimationPlayer = get_node("start" + str(door) + "/door/AnimationPlayer")
 	var player2: AnimationPlayer = get_node("start" + str(door) + "/door2/AnimationPlayer")
 	player.play("open")
