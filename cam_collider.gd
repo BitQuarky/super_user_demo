@@ -1,7 +1,7 @@
 extends CollisionShape3D
 
 @onready var shap: PackedVector3Array = PackedVector3Array();
-@onready var shape2: ConcavePolygonShape3D = ConcavePolygonShape3D.new();
+@onready var shape2: ConvexPolygonShape3D = ConvexPolygonShape3D.new();
 @onready var cam: Node3D = self.get_node("../../..")
 @onready var rays: Array[RayCast3D] = [self.get_node("../../south"), self.get_node("../../southwest"), self.get_node("../../west"), self.get_node("../../northwest"), self.get_node("../../north"), self.get_node("../../northeast"), self.get_node("../../east"), self.get_node("../../southeast")]
 @onready var pole: RayCast3D = self.get_node("../../pole")
@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 				shap.push_back(last);
 				shap.push_back(to_local(pole.get_collision_point()));
 				last = next;
-		shape2.set_faces(shap);
+		shape2.points = shap;
 		self.shape = shape2;
 		old_pos = position
 		old_rot = rotation
