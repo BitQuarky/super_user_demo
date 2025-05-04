@@ -13,6 +13,9 @@ var viewer: Sprite2D
 var shell: Sprite2D
 var menu = false
 
+signal update_last_floor(collider: Object)
+var lastfloor
+
 signal toggleRun
 signal closeMenu
 
@@ -53,6 +56,11 @@ func _physics_process(delta: float) -> void:
 
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	else:
+		if get_slide_collision_count() >= 1:
+			var col = get_slide_collision(0).get_collider()
+			if col != lastfloor:
+				update_last_floor.emit(col)
 
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():

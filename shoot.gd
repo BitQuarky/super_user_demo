@@ -9,6 +9,7 @@ signal advance_goal(goal: int)
 
 var shouldEscape = false 
 var escaped = false
+var lastfloor = null
 
 @onready var player: CharacterBody3D = self.get_parent_node_3d().get_parent_node_3d()
 # Called when the node enters the scene tree for the first time.
@@ -28,6 +29,8 @@ func toggleMove():
 		disableMove.set_meta("speed", 10.0)
 		disableMove.set_meta("jumpScalar", 1.0)		
 
+@onready var gravcenter: Node3D = self.get_parent_node_3d().get_node("gravcenter")
+
 func _process(delta: float) -> void:
 	c = get_collider()
 	if (c != null):
@@ -45,6 +48,21 @@ func _process(delta: float) -> void:
 		elif ((l != null and l.is_in_group("escape") and not c.is_in_group("escape")) or (c.is_in_group("escape") and global_position.distance_to(c.global_position) > 5.0)):
 			popdown.emit()
 		l = c
+		if phyobj is RigidBody3D and physicsMode:
+			var rigidbody: RigidBody3D = phyobj as RigidBody3D
+			var found = false
+			for i in range(0, player.get_slide_collision_count()-1):
+				if player.get_slide_collision(i).get_collider() == rigidbody:
+					print("found!")
+					found = true
+					break
+			if not found and lastfloor != rigidbody:
+				rigidbody.linear_velocity = Vector3.ZERO
+				rigidbody.linear_velocity += player.velocity
+				var dif = gravcenter.global_position - rigidbody.global_position
+				rigidbody.linear_velocity += dif * 4.0
+			else:
+				rigidbody.linear_velocity = Vector3(0.0, -10.0, 0.0)
 
 @onready var file: Label = self.get_parent_node_3d().get_parent_node_3d().get_node("file")
 @onready var text: Label = self.get_parent_node_3d().get_parent_node_3d().get_node("text")
@@ -93,11 +111,15 @@ func _on_animation_player_2_shoot(down: bool) -> void:
 				toggleMouse.emit()
 		elif (c.is_in_group("physicsObject")):
 			if !physicsMode:
-				phyobj = c.get_parent_node_3d()
-				phyobj.reparent(player)
-				tween = get_tree().create_tween()
-				tween.tween_property(phyobj, "position", Vector3(0.0, 0.0, -4.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
-				tween.parallel().tween_property(phyobj, "rotation", Vector3(0.0, -deg_to_rad(90.0), 0.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+				if c is StaticBody3D:
+					phyobj = c.get_parent_node_3d()
+					phyobj.reparent(player)
+					tween = get_tree().create_tween()
+					tween.tween_property(phyobj, "position", Vector3(0.0, 0.0, -4.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+					tween.parallel().tween_property(phyobj, "rotation", Vector3(0.0, -deg_to_rad(90.0), 0.0), 0.5).set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_IN_OUT)
+				elif c is RigidBody3D:
+					phyobj = c
+					phyobj.gravity_scale = 0.0
 				physicsMode = !physicsMode
 			#elif c.get_parent_node_3d() == phyobj:
 			#	phyobj.reparent(player.get_parent_node_3d())
@@ -105,12 +127,17 @@ func _on_animation_player_2_shoot(down: bool) -> void:
 	else:
 		print("released")
 		if (phyobj != null and physicsMode == true):
-			if (tween.is_running()):
-				tween.stop()
-				#release_object()
-				#tween.tween_callback(release_object)
-			#else:
-			release_object()
+			if (phyobj is RigidBody3D):
+				print("here")
+				phyobj.gravity_scale = 1.0
+				physicsMode = !physicsMode
+			elif (phyobj is Node3D):
+				if (tween.is_running()):
+					tween.stop()
+					#release_object()
+					#tween.tween_callback(release_object)
+				#else:
+				release_object()
 		if c != null: print(c.name)
 	pass # Replace with function body.
 
@@ -137,3 +164,7 @@ func reset() -> void:
 	toggleMove()                                                                        
 	toggleMouse.emit()
 	popdown.emit()                                                                                                                                                                                                                                                                                                                                                       
+
+
+func _on_player_2_update_last_floor(collider: Object) -> void:
+	lastfloor = collider
